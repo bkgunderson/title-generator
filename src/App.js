@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect, useCallback } from "react";
+
+import GenerateBook from "./components/GenerateBook";
+import Search from "./components/Search";
 
 function App() {
+  let [bookList, setBookList] = useState([]);
+
+  const fetchData = useCallback(() => {
+    fetch("./data.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setBookList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Let's Make A Book Title</h1>
+      <Search />
+      {/* onSendBook is sort of like a push, yeah? */}
+      <GenerateBook
+        onSendBook={(newBook) => setBookList([...bookList, newBook])}
+        lastId={bookList.reduce(
+          (max, item) => (Number(item.id) > max ? Number(item.id) : max),
+          0
+        )}
+      />
+      <ul>
+        {bookList.map((book) => (
+          <li key={`book-${bookList.indexOf(book)}`}>{book.title}</li>
+        ))}
+      </ul>
     </div>
   );
 }
