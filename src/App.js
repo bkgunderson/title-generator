@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
 import GenerateBook from "./components/GenerateBook";
-import Search from "./components/Search";
 
 function App() {
   let [bookList, setBookList] = useState([]);
@@ -21,7 +20,6 @@ function App() {
   return (
     <div className="App">
       <h1>Let's Make A Book Title</h1>
-      <Search />
       {/* onSendBook is sort of like a push, yeah? */}
       <GenerateBook
         onSendBook={(newBook) => setBookList([...bookList, newBook])}
